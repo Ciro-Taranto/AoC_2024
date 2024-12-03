@@ -12,11 +12,10 @@ def parse_file(path: Path) -> str:
 
 def split_by_do_or_dont(text: str) -> list[str]:
     "return the sequences that should be activated only"
-    split_by_dont = text.split("don't()")
-    valid_sequences = [split_by_dont.pop(0)]
-    for sequence in split_by_dont:
-        split_by_do = sequence.split("do()")
-        valid_sequences.extend(split_by_do[1:])
+    splitted_by_dont = text.split("don't()")
+    valid_sequences = [splitted_by_dont.pop(0)]
+    for sequence in splitted_by_dont:
+        valid_sequences.extend(sequence.split("do()")[1:])
     return valid_sequences
 
 
