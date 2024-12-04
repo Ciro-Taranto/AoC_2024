@@ -13,9 +13,7 @@ def parse_file(path: Path) -> str:
 def find_on_line(line: str) -> int:
     # Yes, it could be done with a single regex,
     # but one would have to take care of the overlap
-    return len(re.findall(r"XMAS", line)) + len(
-        re.findall(r"XMAS", "".join(reversed(line)))
-    )
+    return len(re.findall(r"XMAS", line)) + len(re.findall(r"SAMX", line))
 
 
 def get_vertical_lines(lines: list[str]) -> list[str]:
@@ -31,7 +29,7 @@ def get_diagonal_lines(lines: list[str]) -> list[str]:
     number_of_rows = len(lines)
     number_of_columns = (s := set(len(line) for line in lines)).pop()
     if s:
-        raise ValueError("Not rectangular")
+        raise ValueError("Not rectangular?")
     if number_of_columns != number_of_rows:
         raise ValueError("Not square?")
     n = number_of_rows
