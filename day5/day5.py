@@ -96,11 +96,6 @@ print(result)
 
 def part_two(path: Path) -> int:
     rules, manuals = parse_file(path)
-    # for manual in manuals:
-    #     if not manual.respects_rules(rules):
-    #         print(manual.pages)
-    #         print(manual.fix(rules).pages)
-    #         print("\n")
     incorrectly_ordered = [
         manual for manual in manuals if not manual.respects_rules(rules)
     ]
