@@ -66,13 +66,13 @@ class Map:
 def explore(my_map: Map) -> set:
     current = my_map.position
     direction = my_map.direction
-    explored = {(my_map.position, direction)}
+    explored = {my_map.position}
     while True:
         next_position = current + movements[direction]
         if not my_map.in_bounds(next_position):
             return explored
         if next_position not in my_map.obstructions:
-            explored.add((next_position, direction))
+            explored.add(next_position)
             current = next_position
         else:
             direction = transitions[direction]
@@ -96,9 +96,11 @@ def has_loop(my_map: Map) -> bool:
 
 
 def find_loop_makers(my_map: Map) -> set[Point]:
+    explored = explore(my_map)
     valid = set()
-    for i, j in tqdm(product(range(my_map.max_x), range(my_map.max_y))):
-        new_obstruction = Point(j, i)
+    # for i, j in tqdm(product(range(my_map.max_x), range(my_map.max_y))):
+    # new_obstruction = Point(j, i)
+    for new_obstruction in tqdm(explored):
         if new_obstruction in my_map.obstructions or new_obstruction == my_map.position:
             continue
         new_map = my_map.add_obstruction(new_obstruction)
