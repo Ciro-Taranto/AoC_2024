@@ -3,7 +3,6 @@ import copy
 from pathlib import Path
 from dataclasses import dataclass
 from tqdm import tqdm
-from itertools import product
 
 from aoc_utils import timing
 
@@ -98,8 +97,6 @@ def has_loop(my_map: Map) -> bool:
 def find_loop_makers(my_map: Map) -> set[Point]:
     explored = explore(my_map)
     valid = set()
-    # for i, j in tqdm(product(range(my_map.max_x), range(my_map.max_y))):
-    # new_obstruction = Point(j, i)
     for new_obstruction in tqdm(explored):
         if new_obstruction in my_map.obstructions or new_obstruction == my_map.position:
             continue
