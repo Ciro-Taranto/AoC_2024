@@ -32,11 +32,11 @@ class MemoryMap:
         self.max_x = max_coord
         self.max_y = max_coord
 
-    def bfs(self, start: Point, end: Point) -> Optional[list[Point]]:
-        frontier = [(1, self.manhattan(end, start), start, [start])]
+    def astar(self, start: Point, end: Point) -> Optional[list[Point]]:
+        frontier = [(self.manhattan(end, start), start, [start])]
         visited = set()
         while frontier:
-            _, _, p, path = heappop(frontier)
+            _, p, path = heappop(frontier)
             if p == end:
                 return path
             for np in self.next(p):
@@ -44,7 +44,7 @@ class MemoryMap:
                 if np not in visited:
                     heappush(
                         frontier,
-                        (len(next_path), self.manhattan(end, np), np, next_path),
+                        (self.manhattan(end, np), np, next_path),
                     )
                     visited.add(np)
         return None
@@ -52,7 +52,7 @@ class MemoryMap:
     def find_blocker(self, start: Point, end: Point) -> Point:
         for p in tqdm(self.more_corrupted):
             self.corrupted.add(p)
-            if self.bfs(start, end) is None:
+            if self.astar(start, end) is None:
                 return p
         raise ValueError
 
@@ -87,10 +87,8 @@ class MemoryMap:
 
 
 def part_one(path: Path) -> int:
-    return
     memory_map = MemoryMap(path)
-    path = memory_map.bfs((0, 0), (memory_map.max_x, memory_map.max_y))
-    memory_map.draw(path)
+    path = memory_map.astar((0, 0), (memory_map.max_x, memory_map.max_y))
     return len(path) - 1
 
 
@@ -108,5 +106,5 @@ def part_two(path: Path) -> Point:
 
 
 with timing():
-    result = part_two(Path(__file__).parent / "example.txt")
+    result = part_two(Path(__file__).parent / "input.txt")
 print(result)
