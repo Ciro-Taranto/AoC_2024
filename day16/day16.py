@@ -82,14 +82,14 @@ class Maze:
         visited = {}
         queue = []
         heappush(queue, (0, self.position, self.direction, [self.position]))
-        pbar = tqdm()
+        # pbar = tqdm()
         while queue:
             cost, position, direction, path = heappop(queue)
             visited[position] = cost
-            pbar.update(1)
-            pbar.set_postfix(
-                {"ql": len(queue), "bs": best_score, "ns": len(all_best_paths)}
-            )
+            # pbar.update(1)
+            # pbar.set_postfix(
+            #     {"ql": len(queue), "bs": best_score, "ns": len(all_best_paths)}
+            # )
             if position == self.target:
                 if cost <= best_score:
                     best_score = cost

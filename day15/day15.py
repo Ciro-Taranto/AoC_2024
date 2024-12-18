@@ -150,9 +150,6 @@ class WideRobotMap:
     def in_bounds(self, point: Point) -> bool:
         return 0 <= point[0] < self.max_y and 0 <= point[1] < self.max_x
 
-    def valid(self, point: Point) -> bool:
-        return self.in_bounds(point) and point not in self.obstacles
-
     def robot_intercepts_item(self, point: Point, items: set[Point]) -> Optional[Point]:
         if point in items:
             return point
@@ -168,9 +165,6 @@ class WideRobotMap:
         return intercepted
 
     def is_robot_valid(self, point: Point) -> bool:
-        """
-        Check if robot is in bounds
-        """
         return self.in_bounds(point) and (
             self.robot_intercepts_item(point, self.obstacles) is None
         )
@@ -203,7 +197,6 @@ class WideRobotMap:
                 next_box_position, self.boxes
             ).difference({box}):
                 intercepted_boxes.add(box_to_displace)
-
         return True, updates
 
     def move_one(self, move: Vector) -> None:
@@ -265,7 +258,7 @@ print(result)
 def part_two(path: Path) -> int:
     wide_robot_map = WideRobotMap.from_file(path)
     wide_robot_map.move_all()
-    print(wide_robot_map)
+    # print(wide_robot_map)
     return sum(100 * (y + 1) + x + 2 for y, x in wide_robot_map.boxes)
 
 
