@@ -1,17 +1,17 @@
 from pathlib import Path
-from functools import partial
-from tqdm import tqdm
 from collections import defaultdict
 
 from aoc_utils import timing
 
 
-def parse_file(path: Path) -> tuple[list[str], list[str]]:
+def parse_file(path: Path) -> tuple[dict[int, set[str]], list[str]]:
     with path.open("r") as fin:
         towels, patterns = fin.read().strip().split("\n\n")
-    towels = towels.split(", ")
+    towels_by_length = defaultdict(set)
+    for towel in towels.split(", "):
+        towels_by_length[len(towel)].add(towel)
     patterns = patterns.split("\n")
-    return towels, patterns
+    return towels_by_length, patterns
 
 
 def solve(pattern: str, towels: list[str]) -> bool:
@@ -41,30 +41,12 @@ def solve_p2(pattern: str, towels_by_length: dict[int, set[str]]) -> dict[int, i
     return possibilities
 
 
-def part_one(path: Path) -> int:
-    towels, patterns = parse_file(path)
-    f = partial(solve, towels=towels)
-    return sum(map(f, tqdm(patterns)))
+def part_one_and_two(path: Path) -> int:
+    towels_by_length, patterns = parse_file(path)
+    s = [solve_p2(pattern, towels_by_length)[len(pattern)] for pattern in patterns]
+    print(sum(v > 0 for v in s))
+    print(sum(s))
 
 
 with timing():
-    result = part_one(Path(__file__).parent / "input.txt")
-print(result)
-
-# Part two
-
-
-def part_two(path: Path) -> int:
-    towels, patterns = parse_file(path)
-    towels_by_length = defaultdict(set)
-    for towel in towels:
-        towels_by_length[len(towel)].add(towel)
-    towels = dict(sorted(towels_by_length.items(), key=lambda k: k[0]))
-    return sum(
-        solve_p2(pattern, towels_by_length).get(len(pattern), 0) for pattern in patterns
-    )
-
-
-with timing():
-    result = part_two(Path(__file__).parent / "input.txt")
-print(result)
+    part_one_and_two(Path(__file__).parent / "input.txt")
