@@ -14,25 +14,8 @@ def parse_file(path: Path) -> tuple[dict[int, set[str]], list[str]]:
     return towels_by_length, patterns
 
 
-def solve(pattern: str, towels: list[str]) -> bool:
-    towels = [towel for towel in towels if towel in pattern]
-    queue = {pattern}
-    visited = set()
-    while queue:
-        sp = queue.pop()
-        if sp == "":
-            return True
-        visited.add(sp)
-        for towel in towels:
-            if sp.startswith(towel):
-                nsp = sp[len(towel) :]
-                if nsp not in visited:
-                    queue.add(nsp)
-    return False
-
-
 def solve_p2(pattern: str, towels_by_length: dict[int, set[str]]) -> dict[int, int]:
-    possibilities = defaultdict(int)
+    possibilities = defaultdict(int, {0: 1})
     possibilities[0] = 1
     for i in range(0, len(pattern)):
         for l, towels in towels_by_length.items():
